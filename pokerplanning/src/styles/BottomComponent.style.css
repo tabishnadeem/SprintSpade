@@ -1,0 +1,14 @@
+
+
+.card-bottom {
+    margin-right: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: rgba(0, 0, 0, 0.4) -5px 5px, rgba(0, 0, 0, 0.3) -10px 10px, rgba(0, 46, 170, 0.2) -15px 15px, rgba(0, 0, 0, 0.1) -10px 10px, rgba(0, 0, 0, 0.05) -0 0;
+}
+
+.card-selected{
+    transition: 0.2s;
+    transform: translate(0, -15px) scale(1.2);
+    border-bottom: lightgreen 5px solid !important;
+  }
