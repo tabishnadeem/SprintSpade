@@ -12,6 +12,7 @@ import { app } from "../config/firebase.config";
 import  { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
+import { deleteCurrentUser } from "../utils/DeleteDataInDB";
 
 export default function GamePage() {
   let { uuidParam } = useParams();  
@@ -52,21 +53,19 @@ export default function GamePage() {
   },[])
 
   useEffect(()=>{
-    window.addEventListener('beforeunload',deleteCurrentUser)
-    window.addEventListener('unload', deleteCurrentUser)
+    window.addEventListener('beforeunload',deleteUser)
+    window.addEventListener('unload', deleteUser)
   return () => {
-    window.removeEventListener('beforeunload', deleteCurrentUser)
-    window.removeEventListener('unload', deleteCurrentUser)
+    window.removeEventListener('beforeunload', deleteUser)
+    window.removeEventListener('unload', deleteUser)
   }
   })
 
-   function deleteCurrentUser(){
-     updateDoc(roomRef,{
-      [user]:deleteField()
-    }).then(()=>{
-      window.sessionStorage.clear();
-    })
+  function deleteUser(){
+    deleteCurrentUser(roomRef,user);
   }
+
+
 
   useEffect(() => {
     let dataSet: any = [];
