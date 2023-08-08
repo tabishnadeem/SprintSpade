@@ -7,41 +7,34 @@ import {
 } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 import { app } from "../config/firebase.config";
-import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useEffect, useRef, useState } from "react";
 import Lottie from "lottie-react";
 import noMessageAnimation from "../assets/no_message_animation.json";
 
-export default function ChatContainer() {
+export default function ChatContainer(props:any) {
   const db = getFirestore(app);
   let { uuidParam } = useParams();
   const uuid = window.sessionStorage.getItem("uuid") || uuidParam || "";
   const user = window.sessionStorage.getItem("user") || "";
-  const chatRoomRef = doc(db, `Rooms_PokerPlanning_Chat`, uuid);
-  // const chatRoomRef = collection(db, "Rooms_PokerPlanning_Chat");
-  //? Order By Time stamp issue
-  // const q = query(chatRoomRef)
-  const [value, loading, error] = useDocumentData(chatRoomRef, {
-    snapshotListenOptions: { includeMetadataChanges: true },
-  });
-
+ 
   const messagesEndRef = useRef<null | HTMLDivElement>(null);
 
-  // const [messageData, setMessageData] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 
   async function handleSendMessageBtnClick() {
     setInputMessage("");
     try {
-      const chatRoomRef = doc(db, `/Rooms_PokerPlanning_Chat/`, uuid);
-      const chatRoomData = {
-        chats: arrayUnion({
-          message: inputMessage,
-          sentBy: user,
-          sentAt: Timestamp.fromDate(new Date()),
-        }),
-      };
-      await setDoc(chatRoomRef, chatRoomData, { merge: true });
+      if(inputMessage){
+        const chatRoomRef = doc(db, `/Rooms_PokerPlanning_Chat/`, uuid);
+        const chatRoomData = {
+          chats: arrayUnion({
+            message: inputMessage,
+            sentBy: user,
+            sentAt: Timestamp.fromDate(new Date()),
+          }),
+        };
+        await setDoc(chatRoomRef, chatRoomData, { merge: true });
+      }
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -59,15 +52,15 @@ export default function ChatContainer() {
 
   useEffect(() => {
     scrollToBottom();
-  });
+  },[props.payload]);
 
   return (
     <>
       <div className=" flex flex-col gap-5 justify-between relative w-max p-2 bg-white border h-full border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 ">
         <div className="card w-96 h-full overflow-y-auto bg-base-100 ">
           <div className="card-body p-2">
-            {value ? (
-              value["chats"].map((payload: any, index: number) =>
+            {props.payload ? (
+              props.payload["chats"].map((payload: any, index: number) =>
                 payload.sentBy === user ? (
                   <div className="chat chat-end" key={index}>
                     <div className="chat-bubble">{payload.message}</div>

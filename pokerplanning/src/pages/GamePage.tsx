@@ -1,8 +1,6 @@
 import {
-  deleteField,
   doc,
   getFirestore,
-  updateDoc,
 } from "firebase/firestore";
 import BottomComponent from "../components/BottomComponent";
 import Card from "../components/Card";
@@ -13,6 +11,9 @@ import  { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { deleteCurrentUser } from "../utils/DeleteDataInDB";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+
 
 export default function GamePage() {
   let { uuidParam } = useParams();  
@@ -28,6 +29,9 @@ export default function GamePage() {
     }
 
   })
+
+  const theme = useSelector((state:RootState) => state.theme.value);
+  
   
   const db = getFirestore(app);
   const roomRef = doc(db, `Rooms_PokerPlanning`, uuidParam || "");
@@ -82,13 +86,14 @@ export default function GamePage() {
     setMessageIconClicked(clicked);
   }
 
+
   return (
     <>
     <Header users = {allUserNames} payload = {data} messageIconClick = {handleMessageIconClick} newMessage = {showNewMessageIndicator}/>
-    <div >
+    <div data-theme={theme}>
       <div
         id="app-container"
-        className="flex gap-20 bg-slate-50 justify-evenly items-center flex-col h-screen"
+        className="flex gap-20 justify-evenly items-center flex-col h-screen"
       >
         <div className="flex gap-3 justify-center items-center flex-col ">
           <div id="user-card-top-container" className="flex gap-3">

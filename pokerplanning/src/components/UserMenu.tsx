@@ -2,11 +2,32 @@ import { doc, getFirestore } from "firebase/firestore";
 import "../styles/UserMenu.style.css";
 import { deleteCurrentUser } from "../utils/DeleteDataInDB";
 import { app } from "../config/firebase.config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { toggleDarkMode } from "../redux/theme/themeSlice";
+import { useEffect, useRef, useState } from "react";
 
 export default function UserMenu({ user }: { user: string }) {
   const db = getFirestore(app);
-  const uuid = window.sessionStorage.getItem("uuid") || "";
+  let { uuidParam } = useParams();
+  const uuid = window.sessionStorage.getItem("uuid") || uuidParam || "";
+  console.log("uuid", uuid);
+  // window.navigator.onLine
+
+  const dispatch = useDispatch();
+
+  const [checked, setChecked] = useState(false);
+
+  const ref = useRef<HTMLInputElement>(null);
+
+  const theme = window.localStorage.getItem("theme") || "light";
+  useEffect(() => {
+    if (theme === "dark") {
+      console.log("isChecked", ref.current?.checked);
+      setChecked(true);
+    }
+  });
+
   const roomRef = doc(db, `Rooms_PokerPlanning`, uuid);
 
   const nav = useNavigate();
@@ -15,6 +36,18 @@ export default function UserMenu({ user }: { user: string }) {
     window.sessionStorage.clear();
     deleteCurrentUser(roomRef, user);
     nav(`/`, { replace: true });
+  }
+
+  function handleToggleTheme(event: React.ChangeEvent<HTMLInputElement>) {
+    const target = event.target;
+    if (target.checked) {
+      //enable dark mode
+      dispatch(toggleDarkMode("dark"));
+    } else {
+      //disable dark mode
+      dispatch(toggleDarkMode("light"));
+      setChecked(false);
+    }
   }
 
   return (
@@ -46,6 +79,54 @@ export default function UserMenu({ user }: { user: string }) {
 
         {/* Divider */}
         <hr />
+
+        <li className="py-2">
+          <div>
+            {checked ? (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+                />
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"
+                />
+              </svg>
+            )}
+
+            <input
+              type="checkbox"
+              ref={ref}
+              checked={checked}
+              className="toggle"
+              data-toggle-theme="light,dark"
+              data-act-class="ACTIVECLASS"
+              onChange={(event) => {
+                handleToggleTheme(event);
+              }}
+            />
+          </div>
+        </li>
 
         <li className="py-2">
           <div>

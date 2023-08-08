@@ -1,4 +1,7 @@
 import ICardProp from "../interfaces/ICardProp";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+
 
 export default function Card({
   onClick,
@@ -9,9 +12,12 @@ export default function Card({
   cardLabel = "",
   disabled = false,
 }: ICardProp) {
+
+  const theme = useSelector((state:RootState) => state.theme.value);
+
   return (
     <>
-      <div>
+      <div data-theme={theme}>
         <div
           onClick={!disabled && onClick}
           id= {id}
