@@ -3,6 +3,9 @@ import { app } from "../config/firebase.config";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import IPayload from "../interfaces/IPayload";
+import { RootState } from "../store";
+import { useSelector } from "react-redux";
+
 
 export default function StartGameCard(props: any) {
   const db = getFirestore(app);
@@ -81,9 +84,12 @@ export default function StartGameCard(props: any) {
       }
     }
   }
+
+  const theme = useSelector((state:RootState) => state.theme.value);
+
   return (
     <>
-      <div className="card card-normal w-90 p-10 bg-base-100 shadow-md card-bordered ">
+      <div className="card card-normal w-90 p-10 bg-base-100 shadow-md card-bordered " data-theme={theme}>
         <div className="card-body">
           {isPickACardTextIsVisible ? (
             <div>Start Picking a Card</div>

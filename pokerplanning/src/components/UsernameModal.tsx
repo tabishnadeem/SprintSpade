@@ -7,11 +7,14 @@ export default function UsernameModal({ visible = false }) {
   const [userName, setUserName] = useState("");
   const [loader, setLoader] = useState(false);
 
+
+
   const nav = useNavigate();
   const { state } = useLocation();
   const db = getFirestore(app);
   
   let uuid = window.sessionStorage.getItem("uuid") || state.uuidState || "";
+  window.localStorage.setItem("theme","light");
   if (!uuid) {
     uuid = state.uuidState;
     window.sessionStorage.setItem("uuid", uuid);

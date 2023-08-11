@@ -7,6 +7,7 @@ import { useDocumentData } from "react-firebase-hooks/firestore";
 export default function ChatScreenDrawer(props: any) {
   const [isIndicatorVisible, setIsIndicatorVisible] = useState(false);
   const [messageIconClicked, setMessageIconClicked] = useState(false);
+  const [unreadMsgCount, setUnreadMsgCount] = useState(0);
 
   
   const db = getFirestore(app);
@@ -21,14 +22,16 @@ export default function ChatScreenDrawer(props: any) {
   
 
   useEffect(() => {
-    setMessageIconClicked(false)
-
       const sentBy = value?.chats[value?.chats.length - 1]["sentBy"];
       const messageCount = window.sessionStorage.getItem("messageCount") || "0";
 
     if (value) {
       if (value["chats"].length > +messageCount && !messageIconClicked && sentBy != user) {
         setIsIndicatorVisible(true);
+        console.log('mssg from db',value["chats"].length);
+        
+        const count = value["chats"].length - +messageCount;
+        count > 1 && setUnreadMsgCount(count);
     }else{
         
         setIsIndicatorVisible(false);
@@ -37,15 +40,16 @@ export default function ChatScreenDrawer(props: any) {
   }, [value,messageIconClicked]);
 
   function handleMessageBtnClick() {
-    
+    console.log('clicked');
+    setUnreadMsgCount(0);
     setMessageIconClicked(true);
     window.sessionStorage.setItem("messageCount",value?.chats.length+"");
   }
   return (
     <>
-      <div className="drawer drawer-end">
+      <div className="drawer drawer-end" >
         <input id="my-drawer-4" type="checkbox" className="drawer-toggle" />
-        <div className={`drawer-content text-right mr-4 ${props.className}`}>
+        <div className={`drawer-content text-right mr-4 ${props.className}`} >
           {/* Page content here */}
           <label
             htmlFor="my-drawer-4"
@@ -54,7 +58,7 @@ export default function ChatScreenDrawer(props: any) {
           >
             <div className="indicator">
               {isIndicatorVisible && (
-                <span className="indicator-item badge badge-secondary"></span>
+                <span className="indicator-item badge badge-secondary">{unreadMsgCount < 2 ? "":unreadMsgCount}</span>
               )}
               <span>
                 <svg
@@ -75,9 +79,9 @@ export default function ChatScreenDrawer(props: any) {
             </div>
           </label>
         </div>
-        <div className="drawer-side">
+        <div className="drawer-side" onClick={()=>{setMessageIconClicked(false)}}>
           <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
-          <ChatContainer />
+          <ChatContainer payload = {value}/>
         </div>
       </div>
     </>

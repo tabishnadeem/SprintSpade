@@ -7,9 +7,10 @@ export default {
     extend: {},
   },
   plugins: [require("daisyui")],
+  safelist:[/data-theme$/],
 
   daisyui:{
-    themes:["cupcake","forest"]
+    themes:["light","dark","business","bumblebee"]
   }
 }
 

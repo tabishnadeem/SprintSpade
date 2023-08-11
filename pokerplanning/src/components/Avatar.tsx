@@ -1,12 +1,19 @@
+import UserMenu from "./UserMenu";
+
 export default function Avatar(props: any) {
   const user = window.sessionStorage.getItem("user") || "";
   return (
     <>
       {/* Current Signed In User Avatar */}
-      <div className="avatar placeholder">
+      <div
+        tabIndex={0}
+        className="avatar placeholder cursor-pointer dropdown dropdown-bottom dropdown-end"
+      >
         <div className="bg-neutral-focus text-neutral-content rounded-full w-10">
           <span>{user[0]}</span>
         </div>
+
+       <UserMenu user = {user} />
       </div>
 
       {/* Divider */}

@@ -4,17 +4,25 @@ import { Routes, Route } from "react-router-dom";
 import GamePage from "./pages/GamePage";
 import UsernameModal from "./components/UsernameModal";
 import { v4 as uuidv4 } from "uuid";
-
+import { useEffect } from "react";
+import { themeChange } from "theme-change";
+import { Provider } from "react-redux";
+import { store } from "./store";
 
 function App() {
-    
+  useEffect(() => {
+    themeChange(false);
+  }, []);
+
   return (
     <>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/register"  element={<UsernameModal visible />} />
-        <Route path="/room/:uuidParam"  element={<GamePage />} />
-      </Routes>
+      <Provider store={store}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/register" element={<UsernameModal visible />} />
+          <Route path="/room/:uuidParam" element={<GamePage />} />
+        </Routes>
+      </Provider>
     </>
   );
 }
