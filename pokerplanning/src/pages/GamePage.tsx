@@ -1,5 +1,7 @@
 import {
+  collection,
   doc,
+  getDocs,
   getFirestore,
 } from "firebase/firestore";
 import BottomComponent from "../components/BottomComponent";
@@ -13,6 +15,9 @@ import Header from "../components/Header";
 import { deleteCurrentUser } from "../utils/DeleteDataInDB";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
+import Lottie from "lottie-react"
+import thinkingAnimation from "../assets/thinking_animation.json"
+import sleepingAnimation from "../assets/sleeping_animation.json"
 
 
 export default function GamePage() {
@@ -21,23 +26,55 @@ export default function GamePage() {
   const nav = useNavigate();
 
   const user = window.sessionStorage.getItem("user") || "";
-
-  useEffect(()=>{
-    if (!user) {
-      window.sessionStorage.setItem("uuid",uuidParam || "");
-      nav("/register", { state: { uuidState: uuidParam } });
-    }
-
-  })
-
-  const theme = useSelector((state:RootState) => state.theme.value);
-  
-  
   const db = getFirestore(app);
   const roomRef = doc(db, `Rooms_PokerPlanning`, uuidParam || "");
   const [value, loading, error] = useDocument(roomRef, {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
+
+  async function isDocumentAvailable(docID:string){
+    let documents:string[] = [];
+    const querySnapshot = await getDocs(collection(db, "Rooms_PokerPlanning"));
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    documents.push(doc.id);
+    // console.log(doc.id, " => ", doc.data());
+  });
+  return documents.includes(docID);
+  }
+
+  
+  
+  useEffect(()=>{
+    
+    console.log('value',value?.id);
+    isDocumentAvailable(uuidParam || "").then((isAvailable)=>{
+
+      if(isAvailable){
+        if (!user) {
+          window.sessionStorage.setItem("uuid",uuidParam || "");
+          nav("/register", { state: { uuidState: uuidParam } });
+        }else{
+          console.log('uuidSS',window.sessionStorage.getItem("uuid"));
+          console.log('uuidParam',uuidParam);
+          
+          if(uuidParam !== window.sessionStorage.getItem("uuid")){
+            window.sessionStorage.setItem("uuid",uuidParam || "");
+            nav("/register", { state: { uuidState: uuidParam } });
+            
+          }
+        }
+      }else{
+        nav('/invalid',{replace:true})
+      }
+    })
+
+  })
+
+  const theme = useSelector((state:RootState) => state.theme.value);
+  
+
+  
   
 
   const [messageIconClicked, setMessageIconClicked] = useState(false);
@@ -57,15 +94,17 @@ export default function GamePage() {
   },[])
 
   useEffect(()=>{
-    window.addEventListener('beforeunload',deleteUser)
-    window.addEventListener('unload', deleteUser)
+    // window.addEventListener('beforeunload',()=>deleteUser("1st function"))
+    window.addEventListener('unload', ()=>deleteUser("2nd function"))
   return () => {
-    window.removeEventListener('beforeunload', deleteUser)
-    window.removeEventListener('unload', deleteUser)
+    window.removeEventListener('beforeunload', ()=>deleteUser("3rd function"))
+    window.removeEventListener('unload', ()=>deleteUser("4th function"))
   }
   })
 
-  function deleteUser(){
+  function deleteUser(mssg:string){
+    console.log('mssg',mssg);
+    
     deleteCurrentUser(roomRef,user);
   }
 
@@ -100,6 +139,9 @@ export default function GamePage() {
             {/* {upperList.map((item, index: number) => (
               <Card key={index} cardLabel={Object.keys(item)[0]} />
             ))} */}
+            {
+              loading && <span className="loading loading-ring loading-lg"></span>
+            }
             {Object.keys(data)
               .filter((key) => key != "showData")
               .map((key, index: number) =>
@@ -107,13 +149,18 @@ export default function GamePage() {
                   <Card
                     cardLabel={key}
                     key={index}
-                    cardIcon={data[key].isSelected ? data[key].value : "😵‍💫"}
+                    cardIcon={data[key].isSelected ? data[key].value : (
+                      <Lottie animationData={sleepingAnimation} style={{height:20,width:20}}/>
+
+                    )}
                   />
                 ) : (
                   <Card
                     cardLabel={key}
                     key={index}
-                    cardIcon={data[key].isSelected ? "✅" : "🤔"}
+                    cardIcon={data[key].isSelected ? "✅" : (
+                      <Lottie animationData={thinkingAnimation} style={{height:20,width:20}}/>
+                    )}
                   />
                 )
               )}

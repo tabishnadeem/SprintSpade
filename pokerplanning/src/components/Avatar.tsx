@@ -20,20 +20,20 @@ export default function Avatar(props: any) {
       <div className="divider divider-horizontal"></div>
 
       {/* All Users joined in current room */}
-      <div className="avatar-group -space-x-4">
-        <div className="avatar placeholder">
-          {props.users
-            .filter((user_: string) => user_ != "showData")
-            .filter((user_: string) => user_ != user)
-            .map((user_: string, index: number) => (
+      <div className="avatar-group -space-x-5">
+        {props.users
+          .filter((user_: string) => user_ != "showData")
+          .filter((user_: string) => user_ != user)
+          .map((user_: string, index: number) => (
+            <div className="avatar placeholder">
               <div
                 key={index}
                 className="bg-neutral-focus text-neutral-content rounded-full w-8"
               >
                 <span>{user_[0]}</span>
               </div>
-            ))}
-        </div>
+            </div>
+          ))}
         {/* <div className="avatar placeholder">
           <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
             <span>MX</span>

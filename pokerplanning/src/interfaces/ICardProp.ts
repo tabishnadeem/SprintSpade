@@ -6,6 +6,6 @@ export default interface ICardProp {
     className?:string;
     onClick?:any;
     isBottomCard?:boolean;
-    cardIcon?:string;
+    cardIcon?:string | JSX.Element;
     disabled?:boolean;
 }

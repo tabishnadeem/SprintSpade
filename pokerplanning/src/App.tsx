@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { themeChange } from "theme-change";
 import { Provider } from "react-redux";
 import { store } from "./store";
+import InvalidUUIDPage from "./pages/InvalidUUIDPage";
 
 function App() {
   useEffect(() => {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<UsernameModal visible />} />
           <Route path="/room/:uuidParam" element={<GamePage />} />
+          <Route path="/invalid" element={<InvalidUUIDPage />} />
         </Routes>
       </Provider>
     </>
