@@ -15,7 +15,7 @@ export default function ChatScreenDrawer(props: any) {
   const user = window.sessionStorage.getItem("user") || "";
   
   const chatRoomRef = doc(db, `Rooms_PokerPlanning_Chat`, uuid);
-  const [value, loading, error] = useDocumentData(chatRoomRef, {
+  const [value] = useDocumentData(chatRoomRef, {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
 
@@ -27,9 +27,7 @@ export default function ChatScreenDrawer(props: any) {
 
     if (value) {
       if (value["chats"].length > +messageCount && !messageIconClicked && sentBy != user) {
-        setIsIndicatorVisible(true);
-        console.log('mssg from db',value["chats"].length);
-        
+        setIsIndicatorVisible(true);        
         const count = value["chats"].length - +messageCount;
         count > 1 && setUnreadMsgCount(count);
     }else{
@@ -40,7 +38,6 @@ export default function ChatScreenDrawer(props: any) {
   }, [value,messageIconClicked]);
 
   function handleMessageBtnClick() {
-    console.log('clicked');
     setUnreadMsgCount(0);
     setMessageIconClicked(true);
     window.sessionStorage.setItem("messageCount",value?.chats.length+"");

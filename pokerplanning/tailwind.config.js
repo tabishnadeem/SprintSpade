@@ -10,7 +10,7 @@ export default {
   safelist:[/data-theme$/],
 
   daisyui:{
-    themes:["light","dark","business","bumblebee"]
+    themes:false
   }
 }
 

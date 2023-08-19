@@ -15,7 +15,7 @@ export default function InvalidUUIDPage() {
       </h3>
       <Link to={'/'} replace={true}>
       
-      <button className="btn btn-primary w-40">Back to Home</button>
+      <button className="btn btn-primary w-40" onClick={()=>sessionStorage.clear()}>Back to Home</button>
       </Link>
 
     </div>

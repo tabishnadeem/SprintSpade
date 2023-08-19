@@ -1,3 +1,24 @@
-#app-container{
-  
+#desktop-only{
+    display: none;
 }
+@media screen and (max-width: 768px) {
+    #app-container , #navbar,#error-page-container {
+      display: none;
+    }
+    #desktop-only{
+        display: flex;
+    }
+  }
+
+  @font-face {
+    font-family: 'titleFont';
+    src: local('titleFont'), url(./assets/fonts/Comfortaa-SemiBold.ttf) format('truetype');
+    /* other formats include: 'woff2', 'truetype, 'opentype',
+                              'embedded-opentype', and 'svg' */
+  }
+  @font-face {
+    font-family: 'uuidFont';
+    src: local('uuidFont'), url(./assets/fonts/PressStart2P-Regular.ttf) format('truetype');
+    /* other formats include: 'woff2', 'truetype, 'opentype',
+                              'embedded-opentype', and 'svg' */
+  }
