@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import { CONSTANT } from "../utils/Constants";
@@ -7,8 +6,7 @@ export default function HomePage() {
   const user = window.sessionStorage.getItem("user");
   const uuid = window.sessionStorage.getItem("uuid");
 
-
-  function handleClick(){
+  function handleClick() {
     if (!uuid) {
       const uuid_ = uuidv4();
       window.sessionStorage.setItem("uuid", uuid_);
@@ -16,7 +14,10 @@ export default function HomePage() {
   }
   return (
     <>
-      <div className="relative h-screen flex flex-col-reverse py-16 lg:pt-0 lg:flex-col lg:pb-0">
+      <div
+        className="relative h-screen flex flex-col-reverse py-16 lg:pt-0 lg:flex-col lg:pb-0"
+        data-theme={"light"}
+      >
         <div className="inset-y-0 top-0 right-0 z-0 w-full max-w-xl px-4 mx-auto md:px-0 lg:pr-0 lg:mb-0 lg:mx-0 lg:w-7/12 lg:max-w-full lg:absolute xl:px-0">
           <svg
             className="absolute left-0 hidden h-full text-white transform -translate-x-1/2 lg:block"
@@ -40,7 +41,6 @@ export default function HomePage() {
             <h2 className="mb-5 font-sans text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl sm:leading-none">
               {CONSTANT.HOMEPAGE_MAIN_HEADLINE}
               {/* <br className="hidden md:block" /> */}
-              
             </h2>
             <p className="pr-5 mb-5 text-base text-gray-700 md:text-lg">
               {CONSTANT.HOMEPAGE_MAIN_SUB_HEADLINE}
@@ -48,19 +48,12 @@ export default function HomePage() {
             <div className="flex items-center">
               <Link
                 to={user ? `/room/${uuid}` : "/register"}
-                replace={!user}
+                // replace={!user}
                 onClick={handleClick}
                 className=" btn btn-neutral inline-flex items-center justify-center h-12 px-6 mr-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md bg-deep-purple-accent-400 hover:bg-deep-purple-accent-700 focus:shadow-outline focus:outline-none"
               >
                 Get started
               </Link>
-              <a
-                href="/"
-                aria-label=""
-                className="inline-flex items-center font-semibold text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700"
-              >
-                Learn more
-              </a>
             </div>
           </div>
         </div>

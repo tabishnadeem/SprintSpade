@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import themeSlice from './redux/theme/themeSlice'
+import toastVisibilitySlice from './redux/toast/toastVisibilitySlice'
 
 export const store = configureStore({
   reducer: {
-    theme : themeSlice
+    theme : themeSlice,
+    toastVisibility:toastVisibilitySlice
   },
 })
 

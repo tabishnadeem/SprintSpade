@@ -24,11 +24,12 @@ export default function UsernameModal({ visible = false }) {
     event.preventDefault();
     setLoader(true);
     try {
-      await createRoomAndUserToDB();
-      window.sessionStorage.setItem("user", userName);
-      window.sessionStorage.setItem("messageCount", "0");
-      setLoader(false);
-      nav(`/room/${uuid}`, { replace: true });
+      createRoomAndUserToDB().then(()=>{
+        window.sessionStorage.setItem("user", userName);
+        window.sessionStorage.setItem("messageCount", "0");
+        setLoader(false);
+        nav(`/room/${uuid}`, { replace: true });
+      });
     } catch (e) {
       console.error("Error adding document: ", e);
     }
@@ -47,7 +48,7 @@ export default function UsernameModal({ visible = false }) {
 
   return (
     <>
-      <dialog id="my_modal_1" className="modal" open={visible}>
+      <dialog id="my_modal_1" className="modal" open={visible} data-theme={"light"}>
         <form method="dialog" className="modal-box">
           <h3 className="font-bold text-xl">Enter your Username!</h3>
           <p className="py-4">

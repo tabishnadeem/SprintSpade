@@ -13,7 +13,7 @@ export default function Avatar(props: any) {
           <span>{user[0]}</span>
         </div>
 
-       <UserMenu user = {user} />
+        <UserMenu user={user} />
       </div>
 
       {/* Divider */}
@@ -34,16 +34,6 @@ export default function Avatar(props: any) {
               </div>
             </div>
           ))}
-        {/* <div className="avatar placeholder">
-          <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
-            <span>MX</span>
-          </div>
-        </div>
-        <div className="avatar placeholder">
-          <div className="bg-neutral-focus text-neutral-content rounded-full w-8">
-            <span>MX</span>
-          </div>
-        </div> */}
         {props.users.length > 10 && (
           <div className="avatar placeholder">
             <div className="w-8 bg-neutral-focus text-neutral-content">

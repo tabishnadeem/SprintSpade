@@ -11,9 +11,6 @@ export default function UserMenu({ user }: { user: string }) {
   const db = getFirestore(app);
   let { uuidParam } = useParams();
   const uuid = window.sessionStorage.getItem("uuid") || uuidParam || "";
-  console.log("uuid", uuid);
-  // window.navigator.onLine
-
   const dispatch = useDispatch();
 
   const [checked, setChecked] = useState(false);
@@ -23,7 +20,6 @@ export default function UserMenu({ user }: { user: string }) {
   const theme = window.localStorage.getItem("theme") || "light";
   useEffect(() => {
     if (theme === "dark") {
-      console.log("isChecked", ref.current?.checked);
       setChecked(true);
     }
   });

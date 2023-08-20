@@ -19,7 +19,7 @@ export default function Card({
     <>
       <div data-theme={theme}>
         <div
-          onClick={!disabled && onClick}
+          onClick={!disabled ? onClick:undefined}
           id= {id}
           
           className={`card w-auto p-1 rounded-sm   border-cyan-950 ${disabled && isBottomCard?"bg-gray-400 cursor-not-allowed":" bg-base-200 hover:bg-slate-200 cursor-pointer"} card-bordered ${className}`}
