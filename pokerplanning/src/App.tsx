@@ -1,7 +1,7 @@
+import { lazy, Suspense } from "react";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import { Routes, Route } from "react-router-dom";
-import GamePage from "./pages/GamePage";
 import UsernameModal from "./components/UsernameModal";
 import { useState, useEffect } from "react";
 import { themeChange } from "theme-change";
@@ -11,6 +11,9 @@ import InvalidUUIDPage from "./pages/InvalidUUIDPage";
 import NoInternet from "./pages/NoInternetPage";
 import sorryImage from "./assets/sorry.png";
 import ErrorBoundary from "./ErrorBoundary";
+import LoadingComponent from "./components/LoadingComponent";
+
+const GamePage = lazy(() => import("./pages/GamePage"));
 
 function App() {
   const [isInternetConnectionActive, setIsInternetConnectionActive] = useState(
@@ -52,7 +55,9 @@ function App() {
             path="/register"
             element={
               isInternetConnectionActive ? (
-                <UsernameModal visible />
+                <Suspense fallback={<LoadingComponent />}>
+                  <UsernameModal visible />
+                </Suspense>
               ) : (
                 <NoInternet />
               )
@@ -62,9 +67,11 @@ function App() {
             path="/room/:uuidParam"
             element={
               isInternetConnectionActive ? (
-                <ErrorBoundary>
-                  <GamePage />
-                </ErrorBoundary>
+                <Suspense fallback={<LoadingComponent />}>
+                  <ErrorBoundary>
+                    <GamePage />
+                  </ErrorBoundary>
+                </Suspense>
               ) : (
                 <NoInternet />
               )

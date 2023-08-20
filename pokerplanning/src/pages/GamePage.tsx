@@ -1,10 +1,10 @@
+import { useEffect, useState,lazy,Suspense } from "react";
 import { collection, doc, getDocs, getFirestore } from "firebase/firestore";
-import BottomComponent from "../components/BottomComponent";
-import Card from "../components/Card";
-import StartGameCard from "../components/StartGameCard";
-import { useDocument } from "react-firebase-hooks/firestore";
 import { app } from "../config/firebase.config";
-import { useEffect, useState } from "react";
+import StartGameCard from "../components/StartGameCard";
+import BottomComponent from "../components/BottomComponent";
+const Card = lazy(()=>import("../components/Card"))
+import { useDocument } from "react-firebase-hooks/firestore";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import { deleteCurrentUser } from "../utils/DeleteDataInDB";
@@ -36,6 +36,8 @@ export default function GamePage() {
   const [messageIconClicked, setMessageIconClicked] = useState(false);
   const [showNewMessageIndicator, setShowNewMessageIndicator] = useState(false);
   const [allUserNames, setAllUserNames] = useState<string[]>([]);
+
+  const cardAnimation = (<span className="loading loading-ring loading-lg"></span>);
 
   useEffect(() => {
     isDocumentAvailable(uuidParam || "").then((isAvailable) => {
@@ -151,12 +153,13 @@ export default function GamePage() {
             <div className="flex gap-3 mt-20 justify-center items-center flex-col ">
               <div id="user-card-top-container" className="flex gap-3">
                 {loading && (
-                  <span className="loading loading-ring loading-lg"></span>
+                  cardAnimation
                 )}
                 {upperList
                   .map((key, index: number) =>
                     data["showData"] ? (
-                      <Card
+                    <Suspense fallback={cardAnimation}>
+                        <Card
                         cardLabel={key}
                         key={index}
                         cardIcon={
@@ -170,21 +173,24 @@ export default function GamePage() {
                           )
                         }
                       />
+                    </Suspense>
                     ) : (
-                      <Card
-                        cardLabel={key}
-                        key={index}
-                        cardIcon={
-                          data[key].isSelected ? (
-                            "✅"
-                          ) : (
-                            <Lottie
-                              animationData={thinkingAnimation}
-                              style={{ height: 20, width: 20 }}
-                            />
-                          )
-                        }
-                      />
+                      <Suspense fallback={cardAnimation}>
+                        <Card
+                          cardLabel={key}
+                          key={index}
+                          cardIcon={
+                            data[key].isSelected ? (
+                              "✅"
+                            ) : (
+                              <Lottie
+                                animationData={thinkingAnimation}
+                                style={{ height: 20, width: 20 }}
+                              />
+                            )
+                          }
+                        />
+                      </Suspense>
                     )
                   )}
               </div>
@@ -193,7 +199,8 @@ export default function GamePage() {
                 {lowerList
                   .map((key, index: number) =>
                     data["showData"] ? (
-                      <Card
+                      <Suspense fallback={cardAnimation}>
+                        <Card
                         cardLabel={key}
                         key={index}
                         cardIcon={
@@ -207,8 +214,10 @@ export default function GamePage() {
                           )
                         }
                       />
+                      </Suspense>
                     ) : (
-                      <Card
+                  <Suspense fallback={cardAnimation}>
+                        <Card
                         cardLabel={key}
                         key={index}
                         cardIcon={
@@ -222,6 +231,7 @@ export default function GamePage() {
                           )
                         }
                       />
+                  </Suspense>
                     )
                   )}
               </div>

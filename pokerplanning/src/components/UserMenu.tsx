@@ -125,7 +125,7 @@ export default function UserMenu({ user }: { user: string }) {
         </li>
 
         <li className="py-2">
-          <div>
+          <div onClick={handleLogout}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -141,7 +141,7 @@ export default function UserMenu({ user }: { user: string }) {
               />
             </svg>
 
-            <div onClick={handleLogout}>Logout</div>
+            <div>Logout</div>
           </div>
         </li>
       </ul>

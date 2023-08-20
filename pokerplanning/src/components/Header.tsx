@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import meetingIcon from "../assets/meeting.png";
+import meetingIcon from "../assets/meeting.svg";
 import Avatar from "./Avatar";
 import { useSelector,useDispatch } from "react-redux";
 import { RootState } from "../store";
@@ -14,7 +14,7 @@ export default function Header(props: any) {
 
   function handleCopyButton(){
     dispatch(toggleVisiblity(true));
-    navigator.clipboard.writeText(location.href)
+    window.navigator.clipboard.writeText(location.href)
   }
 
   return (
@@ -27,7 +27,7 @@ export default function Header(props: any) {
         {/* Left Part */}
         <div className="">
           <img src={meetingIcon} alt="" width="48" />
-        <div id="title" style={{fontFamily:"titleFont"}} className="text-2xl ml-8">Sprint Spades</div>
+        <div id="title" style={{fontFamily:"titleFont"}} className="text-2xl ml-2 ">Sprint Spades</div>
         </div>
 
         {/* Center Part */}
