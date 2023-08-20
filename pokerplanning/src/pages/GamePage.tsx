@@ -69,14 +69,6 @@ export default function GamePage() {
     }
   }, []);
 
-  useEffect(() => {
-    window.addEventListener("unload", () => deleteUser());
-    return () => {
-      window.removeEventListener("beforeunload", () => deleteUser());
-      window.removeEventListener("unload", () => deleteUser());
-    };
-  });
-
   function deleteUser() {
     deleteCurrentUser(roomRef, user);
   }
