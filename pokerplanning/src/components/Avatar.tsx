@@ -25,7 +25,7 @@ export default function Avatar(props: any) {
           .filter((user_: string) => user_ != "showData")
           .filter((user_: string) => user_ != user)
           .map((user_: string, index: number) => (
-            <div className="avatar placeholder">
+            <div className="avatar placeholder" key={index}>
               <div
                 key={index}
                 className="bg-neutral-focus text-neutral-content rounded-full w-8"

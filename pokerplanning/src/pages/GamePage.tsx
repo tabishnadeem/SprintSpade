@@ -7,7 +7,6 @@ const Card = lazy(()=>import("../components/Card"))
 import { useDocument } from "react-firebase-hooks/firestore";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import { deleteCurrentUser } from "../utils/DeleteDataInDB";
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
 import Lottie from "lottie-react";
@@ -62,6 +61,7 @@ export default function GamePage() {
   let temp: any[] = [];
 
   let data: any = value?.data() || [];
+  console.log('data',data)
 
   useEffect(() => {
     if (!messageIconClicked) {
@@ -69,9 +69,6 @@ export default function GamePage() {
     }
   }, []);
 
-  function deleteUser() {
-    deleteCurrentUser(roomRef, user);
-  }
   useEffect(() => {
     let isUpper = true;
     let upperUsers = [];
@@ -112,6 +109,9 @@ export default function GamePage() {
     });
   }, [value]);
 
+  console.log('upperList',upperList)
+  console.log('lowerList',lowerList)
+
   function handleMessageIconClick(clicked: boolean) {
     setMessageIconClicked(clicked);
   }
@@ -150,12 +150,12 @@ export default function GamePage() {
                 {upperList
                   .map((key, index: number) =>
                     data["showData"] ? (
-                    <Suspense fallback={cardAnimation}>
+                    <Suspense fallback={cardAnimation} key={index}>
                         <Card
                         cardLabel={key}
                         key={index}
                         cardIcon={
-                          data[key].isSelected ? (
+                          data[key]?.isSelected ? (
                             data[key].value
                           ) : (
                             <Lottie
@@ -167,12 +167,12 @@ export default function GamePage() {
                       />
                     </Suspense>
                     ) : (
-                      <Suspense fallback={cardAnimation}>
+                      <Suspense fallback={cardAnimation} key={index}>
                         <Card
                           cardLabel={key}
                           key={index}
                           cardIcon={
-                            data[key].isSelected ? (
+                            data[key]?.isSelected ? (
                               "✅"
                             ) : (
                               <Lottie
@@ -191,12 +191,12 @@ export default function GamePage() {
                 {lowerList
                   .map((key, index: number) =>
                     data["showData"] ? (
-                      <Suspense fallback={cardAnimation}>
+                      <Suspense fallback={cardAnimation} key={index}>
                         <Card
                         cardLabel={key}
                         key={index}
                         cardIcon={
-                          data[key].isSelected ? (
+                          data[key]?.isSelected ? (
                             data[key].value
                           ) : (
                             <Lottie
@@ -208,12 +208,12 @@ export default function GamePage() {
                       />
                       </Suspense>
                     ) : (
-                  <Suspense fallback={cardAnimation}>
+                  <Suspense fallback={cardAnimation} key={index}>
                         <Card
                         cardLabel={key}
                         key={index}
                         cardIcon={
-                          data[key].isSelected ? (
+                          data[key]?.isSelected ? (
                             "✅"
                           ) : (
                             <Lottie

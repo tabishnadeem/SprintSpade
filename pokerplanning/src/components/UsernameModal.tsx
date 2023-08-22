@@ -56,6 +56,7 @@ export default function UsernameModal({ visible = false }) {
           </p>
           <input
             type="text"
+            autoFocus
             placeholder="Type here"
             value={userName}
             onChange={(input) => setUserName(input.target.value)}
