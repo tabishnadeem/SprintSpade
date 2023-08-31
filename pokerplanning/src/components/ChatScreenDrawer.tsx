@@ -3,6 +3,7 @@ import ChatContainer from "./ChatContainer";
 import { app } from "../config/firebase.config";
 import { useEffect, useState } from "react";
 import { useDocumentData } from "react-firebase-hooks/firestore";
+import { addErrorLogs } from "../utils/ErrorLogs";
 
 export default function ChatScreenDrawer(props: any) {
   const [isIndicatorVisible, setIsIndicatorVisible] = useState(false);
@@ -15,11 +16,15 @@ export default function ChatScreenDrawer(props: any) {
   const user = window.sessionStorage.getItem("user") || "";
   
   const chatRoomRef = doc(db, `Rooms_PokerPlanning_Chat`, uuid);
-  const [value] = useDocumentData(chatRoomRef, {
+  const [value,,error] = useDocumentData(chatRoomRef, {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
 
-  
+  useEffect(()=>{
+    if(error){
+      addErrorLogs("Sprint Spade: ChatScreenDrawer.tsx","error",new Date().toISOString(),JSON.stringify(error))
+    }
+  },[error])
 
   useEffect(() => {
       const sentBy = value?.chats[value?.chats.length - 1]["sentBy"];

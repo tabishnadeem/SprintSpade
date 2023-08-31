@@ -13,6 +13,7 @@ import Lottie from "lottie-react";
 import thinkingAnimation from "../assets/thinking_animation.json";
 import sleepingAnimation from "../assets/sleeping_animation.json";
 import Toast from "../components/Toast";
+import { addErrorLogs } from "../utils/ErrorLogs";
 
 export default function GamePage() {
   let { uuidParam } = useParams();
@@ -23,7 +24,7 @@ export default function GamePage() {
   const db = getFirestore(app);
   const roomRef = doc(db, `Rooms_PokerPlanning`, uuidParam || "");
 
-  const [value, loading] = useDocument(roomRef, {
+  const [value, loading,error] = useDocument(roomRef, {
     snapshotListenOptions: { includeMetadataChanges: true },
   });
 
@@ -57,19 +58,44 @@ export default function GamePage() {
   }, []);
 
   const showData = (value?.data() || {})["showData"];
-
-  let temp: any[] = [];
-
   let data: any = value?.data() || [];
-  console.log('data',data)
+  // console.log('data',data)
 
-  useEffect(() => {
+  
+  useEffect(()=>{
+    if(error) addErrorLogs("Sprint Spade: GamPage.tsx","error",new Date().toISOString(),JSON.stringify(error))
+  },[error])
+
+useEffect(() => {
     if (!messageIconClicked) {
       setShowNewMessageIndicator(true);
     }
   }, []);
 
+  
   useEffect(() => {
+
+    setUpperLowerListsData();
+    setAllUserNames(Object.keys(data));
+    if(value){      
+      addErrorLogs("Sprint Spade: GamePage.tsx","log",new Date().toISOString(),JSON.stringify(data))
+      
+    }
+  }, [value]);
+
+  useEffect(() => {
+
+    if(value){
+      if(upperList){
+        addErrorLogs("SS:GamePage.tsx:UpperList","log",new Date().toISOString(),JSON.stringify(upperList))
+      }else if(lowerList){
+        addErrorLogs("SS:GamePage.tsx:LowerList","log",new Date().toISOString(),JSON.stringify(lowerList))
+        
+      }
+    }
+  }, [upperList,lowerList]);
+
+  function setUpperLowerListsData(){
     let isUpper = true;
     let upperUsers = [];
     let lowerUsers = [];
@@ -101,13 +127,11 @@ export default function GamePage() {
     setUpperList(upperUsers);
     setLowerList(lowerUsers);
 
-    let dataSet: any = [];
-    dataSet = value?.data() || [];
-    setAllUserNames(Object.keys(dataSet));
-    Object.keys(dataSet).map((key) => {
-      temp.push({ [key]: dataSet[key] });
-    });
-  }, [value]);
+   
+  }
+
+  
+
 
   console.log('upperList',upperList)
   console.log('lowerList',lowerList)
@@ -155,7 +179,7 @@ export default function GamePage() {
                         cardLabel={key}
                         key={index}
                         cardIcon={
-                          data[key]?.isSelected ? (
+                          data[key].isSelected ? (
                             data[key].value
                           ) : (
                             <Lottie
@@ -172,7 +196,7 @@ export default function GamePage() {
                           cardLabel={key}
                           key={index}
                           cardIcon={
-                            data[key]?.isSelected ? (
+                            data[key].isSelected ? (
                               "✅"
                             ) : (
                               <Lottie
@@ -196,7 +220,7 @@ export default function GamePage() {
                         cardLabel={key}
                         key={index}
                         cardIcon={
-                          data[key]?.isSelected ? (
+                          data[key].isSelected ? (
                             data[key].value
                           ) : (
                             <Lottie
@@ -213,7 +237,7 @@ export default function GamePage() {
                         cardLabel={key}
                         key={index}
                         cardIcon={
-                          data[key]?.isSelected ? (
+                          data[key].isSelected ? (
                             "✅"
                           ) : (
                             <Lottie
