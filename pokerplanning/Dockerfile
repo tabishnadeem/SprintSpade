@@ -4,7 +4,9 @@ WORKDIR /pokerplanning
 
 COPY . .
 
-RUN npm install
+RUN npm install 
+
+RUN npm i --force
 
 RUN npm run build
 
