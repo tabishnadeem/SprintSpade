@@ -1,6 +1,9 @@
+Version: ’3’
 services:
   app:
     build:
       context: .
-      ports: ["5000:5000"]
-  command: npm run preview
+    ports:
+      	- “5000:5000"
+    command: npm run preview
+  
